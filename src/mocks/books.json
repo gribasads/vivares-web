@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "Churrasqueira",
+        "needPaid": false,
+        "image": "https://via.placeholder.com/150"
+    },
+    {
+        "id": 2,
+        "name": "Salão de Festas",
+        "needPaid": true,
+        "image": "https://via.placeholder.com/150"
+    },
+    {
+        "id": 3,
+        "name": "Quadra de esportes",
+        "needPaid": false,
+        "image": "https://via.placeholder.com/150"
+    }
+]
