@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body style={{ background: "#111", color: "#fff", fontFamily: "sans-serif" }}>
+      <body  className="bg-[#f4f6f9] sans-serif text-black">
         {children}
       </body>
     </html>

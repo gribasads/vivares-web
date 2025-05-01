@@ -1,3 +1,5 @@
+import Menu from "../components/menu";
+
 export default function PrivateLayout({
   children,
 }: Readonly<{
@@ -5,6 +7,7 @@ export default function PrivateLayout({
 }>) {
   return (
     <div>
+      <Menu />
       <h1>Private</h1>
       {children}
     </div>
