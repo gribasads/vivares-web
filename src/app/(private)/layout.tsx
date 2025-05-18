@@ -8,7 +8,6 @@ export default function PrivateLayout({
   return (
     <div>
       <Menu />
-      <h1>Private</h1>
       {children}
     </div>
   );  
