@@ -1,8 +1,8 @@
 'use client';
 
-import Button from "@/app/components/button";
-import Input from "@/app/components/input";
-import VerificationCodeInput from "@/app/components/verification-code-input";
+import Button from "@/app/components/Button";
+import Input from "@/app/components/Input";
+import VerificationCodeInput from "@/app/components/VerificationCodeInput";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
