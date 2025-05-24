@@ -109,6 +109,11 @@ export default function Modal({ title, isOpen, onClose }: ModalProps) {
               placeholder="Digite o motivo da reserva..."
             />
           </div>
+          <div className="flex justify-end">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">
+              Reservar
+            </button>
+          </div>
         </div>
       </div>
     </div>
