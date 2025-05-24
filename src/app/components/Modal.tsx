@@ -7,10 +7,11 @@ interface ModalProps {
     title: string;
     isOpen?: boolean;
     id?: string;
+    needPaid?: boolean;
     onClose?: () => void;
 }
 
-export default function Modal({ title, isOpen, onClose }: ModalProps) {
+export default function Modal({ title, isOpen, onClose, needPaid }: ModalProps) {
   const [guests, setGuests] = useState<string[]>(['']);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -38,12 +39,25 @@ export default function Modal({ title, isOpen, onClose }: ModalProps) {
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center p-4 z-50 overflow-y-auto">
       <div className="bg-white rounded-lg w-full max-w-2xl p-6 relative my-8">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold">{title}</h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
             <X size={24} />
           </button>
         </div>
+        {needPaid && (
+          <p className="text-sm text-gray-500 mt-1 mb-4 flex items-center gap-1">
+            *Necessita pagamento
+            <span className="relative group">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-500 cursor-help" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="invisible group-hover:visible absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg">
+                A reserva só será confirmada após o pagamento da reserva na administração
+              </span>
+            </span>
+          </p>
+        )}
 
         <div className="space-y-4">
           <div className="flex gap-4">

@@ -7,10 +7,12 @@ import Modal from './Modal';
 export default function BookBlock() {
     const [selectedBook, setSelectedBook] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [needPaid, setNeedPaid] = useState(false);
 
-    const handleBookClick = (bookName: string) => {
+    const handleBookClick = (bookName: string, needPaid: boolean) => {
         setSelectedBook(bookName);
         setIsModalOpen(true);
+        setNeedPaid(needPaid);
     };
 
     const handleCloseModal = () => {
@@ -25,7 +27,7 @@ export default function BookBlock() {
                     <div 
                         key={book.id} 
                         className="bg-white p-10 rounded-md shadow-md hover:scale-105 transition-all duration-300 cursor-pointer"
-                        onClick={() => handleBookClick(book.name)}
+                        onClick={() => handleBookClick(book.name, book.needPaid)}
                     >
                         <Image src="/logo/logo.png" alt={book.name} width={100} height={100} />
                         <h1 className="text-xl font-bold">{book.name}</h1>
@@ -38,6 +40,7 @@ export default function BookBlock() {
                 title={selectedBook || ''} 
                 isOpen={isModalOpen} 
                 onClose={handleCloseModal}
+                needPaid={needPaid}
             />
         </>
     )
