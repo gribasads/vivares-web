@@ -6,7 +6,7 @@ import 'draft-js/dist/Draft.css';
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import { FaSmile, FaImage } from 'react-icons/fa';
-
+import Image from 'next/image';
 interface TextAreaProps {
   onChange?: (content: string) => void;
   placeholder?: string;
@@ -181,7 +181,7 @@ const MediaBlock = (props: any) => {
   if (type === 'IMAGE') {
     return (
       <div className="my-4">
-        <img src={src} alt="" className="max-w-full rounded-lg" />
+        <Image src={src} alt="" className="max-w-full rounded-lg" />
       </div>
     );
   }

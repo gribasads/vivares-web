@@ -1,6 +1,6 @@
 "use client";
 
-import TextArea from "@/app/components/textArea";
+import TextArea from "@/app/components/TextArea";
 import FeedBox from "@/app/components/feedBox";
 import { useState } from "react";
 
