@@ -31,6 +31,12 @@ export default function Menu() {
         >
           Feed
         </Link>
+        <Link
+          href="/list"
+          className={`text-lg  hover:text-blue-500 hover:underline ${pathname === '/list' ? 'text-blue-500 underline' : ''}`}
+        >
+          Lista
+        </Link>
       </div>
       
       <div className="w-[100px]">

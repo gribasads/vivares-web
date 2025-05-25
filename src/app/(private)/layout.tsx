@@ -1,4 +1,4 @@
-import Menu from "../components/Menu";
+import Menu from "@/app/components/Menu";
 
 export default function PrivateLayout({
   children,

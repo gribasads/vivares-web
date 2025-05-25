@@ -1,7 +1,7 @@
 "use client";
 
-import TextArea from "@/app/components/textArea";
-import FeedBox from "@/app/components/feedBox";
+import TextArea from "@/app/components/TextArea";
+import FeedBox from "@/app/components/FeedBox";
 import { useState } from "react";
 
 export default function Feed() {
