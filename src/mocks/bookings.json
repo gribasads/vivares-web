@@ -1,0 +1,52 @@
+{
+  "bookings": [
+    {
+      "id": 1,
+      "local": "Salão de Festas",
+      "date": "2024-03-20:10:00",
+      "status": "pending",
+      "name": "João Silva",
+      "address": "101"
+    },
+    {
+      "id": 2,
+      "local": "Quadra de esportes",
+      "date": "2024-03-21:14:00",
+      "status": "approved",
+      "name": "Maria Santos",
+      "address": "202"
+    },
+    {
+      "id": 3,
+      "local": "Churrasqueira",
+      "date": "2024-03-22:18:00",
+      "status": "rejected",
+      "name": "Pedro Oliveira",
+      "address": "303"
+    },
+    {
+      "id": 4,
+      "local": "Quadra de esportes",
+      "date": "2024-03-23:16:00",
+      "status": "pending",
+      "name": "Ana Costa",
+      "address": "404"
+    },
+    {
+      "id": 5,
+      "local": "Quadra de esportes",
+      "date": "2024-03-24:11:00",
+      "status": "pending",
+      "name": "Carlos Mendes",
+      "address": "505"
+    },
+    {
+      "id": 6,
+      "local": "Churrasqueira",
+      "date": "2024-03-25:09:00",
+      "status": "approved",
+      "name": "Juliana Lima",
+      "address": "606"
+    }
+  ]
+} 
