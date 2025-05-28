@@ -2,12 +2,13 @@
 import React, { useState } from 'react'
 import books from "@/mocks/books.json";
 import Image from 'next/image';
-import Modal from './Modal';
+import ModalBook from '../(private)/book/components/ModalBook';
 
 export default function BookBlock() {
     const [selectedBook, setSelectedBook] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [needPaid, setNeedPaid] = useState(false);
+
 
     const handleBookClick = (bookName: string, needPaid: boolean) => {
         setSelectedBook(bookName);
@@ -19,7 +20,7 @@ export default function BookBlock() {
         setIsModalOpen(false);
         setSelectedBook(null);
     };
-
+    
     return (
         <>
             <div className="flex flex-row gap-5 p-5">
@@ -36,7 +37,7 @@ export default function BookBlock() {
                 ))}
             </div>
 
-            <Modal 
+            <ModalBook 
                 title={selectedBook || ''} 
                 isOpen={isModalOpen} 
                 onClose={handleCloseModal}
