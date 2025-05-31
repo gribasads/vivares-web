@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { X, Plus, Trash2 } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import Modal from '@/app/components/Modal';

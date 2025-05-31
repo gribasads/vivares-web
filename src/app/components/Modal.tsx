@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
-import { X, Plus, Trash2 } from 'lucide-react'
-import DatePicker from 'react-datepicker'
-import "react-datepicker/dist/react-datepicker.css"
+import React from 'react'
+import { X } from 'lucide-react'
 
 interface ModalProps {
     title: string;

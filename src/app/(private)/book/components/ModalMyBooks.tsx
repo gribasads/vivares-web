@@ -1,7 +1,6 @@
 'use client'
 import Modal from '@/app/components/Modal'
-import { BookingList } from '@/app/types/bookingList';
-import React, { useState } from 'react'
+import React from 'react'
 import { format } from 'date-fns';
 import mock from '@/mocks/bookings.json'
 
