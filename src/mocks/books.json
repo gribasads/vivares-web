@@ -2,19 +2,19 @@
     {
         "id": 1,
         "name": "Churrasqueira",
-        "needPaid": false,
+        "needPayment": false,
         "image": "https://via.placeholder.com/150"
     },
     {
         "id": 2,
         "name": "Salão de Festas",
-        "needPaid": true,
+        "needPayment": true,
         "image": "https://via.placeholder.com/150"
     },
     {
         "id": 3,
         "name": "Quadra de esportes",
-        "needPaid": false,
+        "needPayment": false,
         "image": "https://via.placeholder.com/150"
     }
 ]
