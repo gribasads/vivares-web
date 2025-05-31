@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table } from '@/app/components/Table'
 import { headers } from './constants'
-import { bookings } from '../../../mocks/bookings.json'
+import { bookings } from '@/mocks/bookings.json'
 import { CircleCheckBig, CircleX } from 'lucide-react'
 import { format } from 'date-fns'
 

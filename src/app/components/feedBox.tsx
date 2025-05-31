@@ -2,18 +2,12 @@ interface FeedBoxProps {
   userName: string;
   timeAgo: string;
   content: string;
-  onLike?: () => void;
-  onComment?: () => void;
-  onShare?: () => void;
 }
 
 export default function FeedBox({
   userName,
   timeAgo,
-  content,
-  onLike,
-  onComment,
-  onShare
+  content
 }: FeedBoxProps) {
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm max-w-2xl mx-auto">
