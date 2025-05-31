@@ -1,7 +1,7 @@
 'use client';
 
-import Button from "@/app/components/Button";
-import Input from "@/app/components/Input";
+import Button from "@/app/components/button";
+import Input from "@/app/components/input";
 import VerificationCodeInput from "@/app/components/VerificationCodeInput";
 import Image from "next/image";
 import { useState, useEffect } from "react";
