@@ -29,12 +29,15 @@ export default function SignIn() {
     setMessage('');
 
     try {
-      const response = await fetch(`${API_BASE_URL}auth/request-code`, {
+      const response = await fetch(`${API_BASE_URL}/auth/request-code`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
-        body: JSON.stringify({ email }),
+        mode: 'cors',
+        body: JSON.stringify({ email })
       });
 
       const data = await response.json();
@@ -57,12 +60,15 @@ export default function SignIn() {
     setMessage('');
 
     try {
-      const response = await fetch(`${API_BASE_URL}auth/verify-code`, {
+      const response = await fetch(`${API_BASE_URL}/auth/verify-code`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
-        body: JSON.stringify({ email, code }),
+        mode: 'cors',
+        body: JSON.stringify({ email, code })
       });
 
       const data = await response.json();
