@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 type Step = 'email' | 'code';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001';
+const API_BASE_URL = process.env.BASE_URL;
 
 export default function SignIn() {
   const [mounted, setMounted] = useState(false);
