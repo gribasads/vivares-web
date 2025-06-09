@@ -29,7 +29,7 @@ export default function SignIn() {
     setMessage('');
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/request-code`, {
+      const response = await fetch(`${API_BASE_URL}auth/request-code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ export default function SignIn() {
     setMessage('');
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/verify-code`, {
+      const response = await fetch(`${API_BASE_URL}auth/verify-code`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
