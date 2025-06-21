@@ -52,6 +52,14 @@ export default function SignIn() {
 
       if (!data.error && data.token) {
         document.cookie = `authToken=${data.token}; path=/`;
+        
+        const profileData = await authService.getProfile();
+        
+        if (profileData.error) {
+          setMessage(profileData.error);
+          return;
+        }
+        
         router.push('/');
       } else {
         setMessage(data.error || 'Código inválido');

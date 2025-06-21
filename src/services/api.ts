@@ -11,10 +11,9 @@ export const api = axios.create({
   }
 });
 
-// Interceptador para requisições
+
 api.interceptors.request.use(
   (config) => {
-    // Aqui você pode adicionar o token de autenticação
     const token = document.cookie
       .split('; ')
       .find(row => row.startsWith('authToken='))
