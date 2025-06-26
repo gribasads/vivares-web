@@ -6,10 +6,9 @@ import VerificationCodeInput from "@/app/components/VerificationCodeInput";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { authService } from "@/services/auth";
 
 type Step = 'email' | 'code';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function SignIn() {
   const [mounted, setMounted] = useState(false);
@@ -29,20 +28,9 @@ export default function SignIn() {
     setMessage('');
 
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/request-code`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        mode: 'cors',
-        body: JSON.stringify({ email })
-      });
+      const data = await authService.requestCode(email);
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (!data.error) {
         setMessage('Código enviado com sucesso para seu e-mail');
         setStep('code');
       } else {
@@ -60,21 +48,18 @@ export default function SignIn() {
     setMessage('');
 
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/verify-code`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        mode: 'cors',
-        body: JSON.stringify({ email, code })
-      });
+      const data = await authService.verifyCode(email, code);
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (!data.error && data.token) {
         document.cookie = `authToken=${data.token}; path=/`;
+        
+        const profileData = await authService.getProfile();
+        
+        if (profileData.error) {
+          setMessage(profileData.error);
+          return;
+        }
+        
         router.push('/');
       } else {
         setMessage(data.error || 'Código inválido');

@@ -3,18 +3,21 @@ import { Plus, Trash2 } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import Modal from '@/app/components/Modal';
+import { bookService } from '@/services/book';
+import { authService } from '@/services/auth';
 
 interface ModalProps {
     title: string;
     isOpen?: boolean;
-    id?: string;
+    placeId?: string;
     needPaid?: boolean;
     onClose?: () => void;
 }
 
-export default function ModalBook({ title, isOpen, onClose, needPaid }: ModalProps) {
+export default function ModalBook({ title, isOpen, onClose, needPaid, placeId }: ModalProps) {
   const [guests, setGuests] = useState<string[]>(['']);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [reason, setReason] = useState<string>('');
 
   const addGuest = () => {
     if (guests.length < 6) {
@@ -34,6 +37,18 @@ export default function ModalBook({ title, isOpen, onClose, needPaid }: ModalPro
     newGuests[index] = value;
     setGuests(newGuests);
   };
+
+  const handleBook = async () => {
+    const booking = {
+      placeId: placeId || '',
+      userId: authService.getUserId() || '',
+      dateHour: selectedDate,
+      guests: guests,
+      reason: reason,
+    }
+    const response = await bookService.book(booking);
+    
+  }
 
   if (!isOpen) return null;
 
@@ -61,7 +76,7 @@ export default function ModalBook({ title, isOpen, onClose, needPaid }: ModalPro
               </label>
               <DatePicker
                 selected={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
+                onChange={(date: Date | null) => setSelectedDate(date || new Date())}
                 showTimeSelect
                 timeFormat="HH:mm"
                 timeIntervals={15}
@@ -115,10 +130,12 @@ export default function ModalBook({ title, isOpen, onClose, needPaid }: ModalPro
             <textarea
               className="w-full h-20 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               placeholder="Digite o motivo da reserva..."
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
             />
           </div>
           <div className="flex justify-end">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors" onClick={handleBook}>
               Reservar
             </button>
           </div>
