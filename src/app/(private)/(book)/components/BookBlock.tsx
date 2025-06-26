@@ -56,6 +56,7 @@ export default function BookBlock() {
                 isOpen={isModalOpen} 
                 onClose={handleCloseModal}
                 needPaid={needPaid}
+                placeId={places.find((place) => place.name === selectedBook)?._id.toString() || ''}
             />
         </>
     )
