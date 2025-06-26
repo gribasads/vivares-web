@@ -46,8 +46,13 @@ export default function ModalBook({ title, isOpen, onClose, needPaid, placeId }:
       guests: guests,
       reason: reason,
     }
-    const response = await bookService.book(booking);
-    
+    try {
+      await bookService.book(booking);
+      console.log('Reserva criada com sucesso!');
+      onClose?.();
+    } catch (error) {
+      console.error('Erro ao criar reserva:', error);
+    }
   }
 
   if (!isOpen) return null;

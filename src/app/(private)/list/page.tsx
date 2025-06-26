@@ -1,13 +1,13 @@
 import React from 'react'
 import { Table } from '@/app/components/Table'
 import { headers } from './constants'
-import { bookings } from '@/mocks/bookings.json'
+import bookingsData from '@/mocks/bookings.json'
 import { CircleCheckBig, CircleX } from 'lucide-react'
 import { format } from 'date-fns'
 
 export default function List() {
 
-  const renderData = bookings.map((booking) => {
+  const renderData = bookingsData.bookings.map((booking) => {
     return (
       <tr key={booking.id}>
         <td className='px-6 py-4 whitespace-nowrap'>{booking.local}</td>
