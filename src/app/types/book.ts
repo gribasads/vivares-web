@@ -1,4 +1,4 @@
-type Status = "pending" | "approved" | "rejected";
+export type Status = "pending" | "approved" | "rejected";
 
 export interface Book {
     placeId: string;

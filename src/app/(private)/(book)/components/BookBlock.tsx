@@ -1,6 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import books from "@/mocks/books.json";
+import React, { useEffect, useState, useCallback } from 'react'
 import Image from 'next/image';
 import ModalBook from './ModalBook';
 
@@ -26,14 +25,14 @@ export default function BookBlock() {
         setSelectedBook(null);
     };
 
-    const getPlaces = async () => {
+    const getPlaces = useCallback(async () => {
         const response = await placesService.getPlaces(getCondominiumId() || '');
         setPlaces(response);
-    }
+    }, [getCondominiumId]);
 
     useEffect(() => {
         getPlaces();
-    }, []);
+    }, [getPlaces]);
 
     return (
         <>
