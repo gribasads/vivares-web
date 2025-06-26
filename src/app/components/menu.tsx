@@ -20,16 +20,10 @@ export default function Menu() {
       
       <div className="flex items-center gap-8">
         <Link
-          href="/book"
-          className={`text-lg  hover:text-blue-500 hover:underline ${pathname === '/book' ? 'text-blue-500 underline' : ''}`}
-        >
-          Reservas
-        </Link>
-        <Link
           href="/"
           className={`text-lg  hover:text-blue-500 hover:underline ${pathname === '/' ? 'text-blue-500 underline' : ''}`}
         >
-          Feed
+          Reservas
         </Link>
         <Link
           href="/list"

@@ -1,5 +1,5 @@
 'use client'
-import BookBlock from "@/app/(private)/book/components/BookBlock";
+import BookBlock from "@/app/(private)/(book)/components/BookBlock";
 import Button from "@/app/components/button";
 import { useState } from "react";
 import ModalMyBooks from "./components/ModalMyBooks";
