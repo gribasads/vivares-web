@@ -17,6 +17,7 @@ interface UserProfile {
   condominiumId: string;
   apartmentNumber: string;
   condominiumName: string;
+  isAdmin?: boolean;
   condominiumAddress: {
     street: string;
     number: string;
@@ -28,6 +29,12 @@ interface UserProfile {
 
 interface ProfileResponse {
   data?: UserProfile;
+  error?: string;
+}
+
+interface ToggleAdminResponse {
+  isAdmin: boolean;
+  message: string;
   error?: string;
 }
 
@@ -98,11 +105,53 @@ export const authService = {
       setSecureStorage('userId', data.id);
       setSecureStorage('apartmentId', data.apartmentId);
       setSecureStorage('condominiumId', data.condominiumId);
+      
+      // Só atualizar isAdmin se ele existir na resposta da API e for diferente de undefined
+      if (data.isAdmin !== undefined) {
+        setSecureStorage('isAdmin', data.isAdmin ? 'true' : 'false');
+      }
 
       return { data };
     } catch (error: any) {
       return {
         error: error.response?.data?.error || 'Erro ao buscar perfil do usuário'
+      };
+    }
+  },
+
+  async toggleAdmin(userId: string): Promise<ToggleAdminResponse> {
+    try {
+      const getCookie = (name: string): string | null => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+        return null;
+      };
+
+      const token = getCookie('authToken');
+      if (!token) {
+        return { isAdmin: false, message: '', error: 'Token não encontrado' };
+      }
+
+      const { data } = await api.patch<ToggleAdminResponse>(`/auth/users/${userId}/toggle-admin`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      // Aguardar um pequeno delay para garantir que a requisição terminou
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Atualizar o valor no sessionStorage
+      setSecureStorage('isAdmin', data.isAdmin ? 'true' : 'false');
+
+      return data;
+    } catch (error: any) {
+      return {
+        isAdmin: false,
+        message: '',
+        error: error.response?.data?.error || 'Erro ao alterar status de administrador'
       };
     }
   },
@@ -120,12 +169,21 @@ export const authService = {
     return getSecureStorage('condominiumId');
   },
 
+  isAdmin(): boolean {
+    const value = getSecureStorage('isAdmin');
+    console.log('isAdmin() - Valor no sessionStorage:', value);
+    const result = value === 'true';
+    console.log('isAdmin() - Retornando:', result);
+    return result;
+  },
+
   // Função para limpar dados do sessionStorage
   clearUserData(): void {
     try {
       sessionStorage.removeItem('userId');
       sessionStorage.removeItem('apartmentId');
       sessionStorage.removeItem('condominiumId');
+      sessionStorage.removeItem('isAdmin');
     } catch (error) {
       console.error('Erro ao limpar dados do sessionStorage:', error);
     }

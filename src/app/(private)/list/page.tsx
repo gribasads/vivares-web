@@ -7,12 +7,15 @@ import { format } from 'date-fns'
 import { bookService } from '@/services/book'
 import { ListBooks } from '@/app/types/listBooks'
 import { authService } from '@/services/auth'
+import { useRouter } from 'next/navigation'
 
 export default function List() {
   const [books, setBooks] = useState<ListBooks[]>([]);
   const [loading, setLoading] = useState(true);
   const [changingStatus, setChangingStatus] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const condominiumId = authService.getCondominiumId();
+  const router = useRouter();
 
   const fetchBooks = async () => {
     if (condominiumId) {
@@ -28,9 +31,45 @@ export default function List() {
     }
   };
 
+  const checkAdminStatus = async () => {
+    try {
+      const adminStatus = authService.isAdmin();
+      setIsAdmin(adminStatus);
+      
+      if (!adminStatus) {
+        router.push('/');
+        return;
+      }
+    } catch (error) {
+      console.error('Erro ao verificar status de admin:', error);
+      router.push('/');
+    }
+  };
+
   useEffect(() => {
-    fetchBooks();
+    checkAdminStatus();
   }, []);
+
+  useEffect(() => {
+    if (isAdmin) {
+      fetchBooks();
+    }
+  }, [isAdmin]);
+
+  // Monitorar mudanças no status de admin e redirecionar se necessário
+  useEffect(() => {
+    const checkAdminAndRedirect = () => {
+      const currentAdminStatus = authService.isAdmin();
+      if (!currentAdminStatus) {
+        router.push('/');
+      }
+    };
+
+    // Verificar a cada 2 segundos se o status mudou
+    const interval = setInterval(checkAdminAndRedirect, 2000);
+
+    return () => clearInterval(interval);
+  }, [router]);
 
   const handleStatusChange = async (bookId: string, status: "approved" | "rejected") => {
     try {
