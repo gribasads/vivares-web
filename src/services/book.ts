@@ -10,6 +10,10 @@ interface BookResponse {
     status: "pending" | "approved" | "rejected";
 }
 
+interface AvailabilityResponse {
+    available: boolean;
+}
+
 export const bookService = {
     async book(book: Book): Promise<Book> {
         const { data } = await api.post<Book>('/books', book);
@@ -28,5 +32,10 @@ export const bookService = {
 
     async changeBookStatus(bookId: string, status: "pending" | "approved" | "rejected"): Promise<void> {
         await api.patch(`/books/${bookId}/status`, { status });
+    },
+
+    async checkAvailability(placeId: string, date: string): Promise<AvailabilityResponse> {
+        const { data } = await api.get<AvailabilityResponse>(`/books/availability?placeId=${placeId}&date=${date}`);
+        return data;
     }
 }
