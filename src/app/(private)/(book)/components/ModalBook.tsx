@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Plus, Trash2 } from 'lucide-react'
+import { Plus, Trash2, Loader2 } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import Modal from '@/app/components/Modal';
@@ -19,6 +19,7 @@ export default function ModalBook({ place, isOpen, onClose }: ModalProps) {
   const [reason, setReason] = useState<string>('');
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
+  const [isBooking, setIsBooking] = useState(false);
 
   // Função para gerar horários disponíveis baseado no horário de funcionamento
   const getAvailableTimeSlots = () => {
@@ -91,27 +92,32 @@ export default function ModalBook({ place, isOpen, onClose }: ModalProps) {
   };
 
   const handleBook = async () => {
-    if (!place || !isAvailable) return;
+    if (!place || !isAvailable || isBooking) return;
 
-    const booking = {
-      placeId: place._id,
-      userId: authService.getUserId() || '',
-      dateHour: selectedDate,
-      guests: guests,
-      reason: reason,
-    }
+    setIsBooking(true);
     try {
+      const booking = {
+        placeId: place._id,
+        userId: authService.getUserId() || '',
+        dateHour: selectedDate,
+        guests: guests,
+        reason: reason,
+      }
+      
       await bookService.book(booking);
       console.log('Reserva criada com sucesso!');
       onClose?.();
     } catch (error) {
       console.error('Erro ao criar reserva:', error);
+    } finally {
+      setIsBooking(false);
     }
   }
 
   if (!isOpen || !place) return null;
 
   const availableTimeSlots = getAvailableTimeSlots();
+  const isFormValid = isAvailable && reason.trim().length > 0 && !isBooking;
 
   return (
     <Modal title={place.name} isOpen={isOpen} onClose={onClose}>
@@ -148,6 +154,7 @@ export default function ModalBook({ place, isOpen, onClose }: ModalProps) {
                 includeTimes={availableTimeSlots}
                 minTime={availableTimeSlots[0]}
                 maxTime={availableTimeSlots[availableTimeSlots.length - 1]}
+                disabled={isBooking}
               />
               <p className="text-xs text-gray-500 mt-1">
                 Horário de funcionamento: {place.openingTime} - {place.closingTime}
@@ -167,11 +174,12 @@ export default function ModalBook({ place, isOpen, onClose }: ModalProps) {
                       onChange={(e) => updateGuest(index, e.target.value)}
                       className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Nome do convidado"
+                      disabled={isBooking}
                     />
                     {index === 0 ? (
                       <button
                         onClick={addGuest}
-                        disabled={guests.length >= 6}
+                        disabled={guests.length >= 6 || isBooking}
                         className="p-2 bg-blue-500 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Plus size={20} />
@@ -179,7 +187,8 @@ export default function ModalBook({ place, isOpen, onClose }: ModalProps) {
                     ) : (
                       <button
                         onClick={() => removeGuest(index)}
-                        className="p-2 bg-red-500 text-white rounded-md"
+                        className="p-2 bg-red-500 text-white rounded-md disabled:opacity-50"
+                        disabled={isBooking}
                       >
                         <Trash2 size={20} />
                       </button>
@@ -205,26 +214,39 @@ export default function ModalBook({ place, isOpen, onClose }: ModalProps) {
 
           <div className="h-24">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Motivo da Reserva
+              Motivo da Reserva <span className="text-red-500">*</span>
             </label>
             <textarea
               className="w-full h-20 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               placeholder="Digite o motivo da reserva..."
               value={reason}
               onChange={(e) => setReason(e.target.value)}
+              disabled={isBooking}
             />
+            {reason.trim().length === 0 && (
+              <p className="text-xs text-red-500 mt-1">
+                O motivo da reserva é obrigatório
+              </p>
+            )}
           </div>
           <div className="flex justify-end">
             <button 
-              className={`px-4 py-2 rounded-md transition-colors ${
-                isAvailable 
+              className={`px-4 py-2 rounded-md transition-colors flex items-center gap-2 ${
+                isFormValid
                   ? 'bg-blue-500 text-white hover:bg-blue-600' 
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`} 
               onClick={handleBook}
-              disabled={!isAvailable}
+              disabled={!isFormValid}
             >
-              Reservar
+              {isBooking ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  Realizando reserva...
+                </>
+              ) : (
+                'Reservar'
+              )}
             </button>
           </div>
         </div>
