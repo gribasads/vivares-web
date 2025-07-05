@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Plus, Trash2, Loader2, Check, X, AlertTriangle } from 'lucide-react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { Plus, Trash2, Loader2, Check, AlertTriangle } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import Modal from '@/app/components/Modal';
@@ -67,13 +67,7 @@ export default function ModalBook({ place, isOpen, onClose }: ModalProps) {
   };
 
   // Verificar disponibilidade quando a data/hora mudar
-  useEffect(() => {
-    if (place && selectedDate) {
-      checkAvailability();
-    }
-  }, [place, selectedDate]);
-
-  const checkAvailability = async () => {
+  const checkAvailability = useCallback(async () => {
     if (!place) return;
     
     setIsCheckingAvailability(true);
@@ -89,7 +83,13 @@ export default function ModalBook({ place, isOpen, onClose }: ModalProps) {
     } finally {
       setIsCheckingAvailability(false);
     }
-  };
+  }, [place, selectedDate]);
+
+  useEffect(() => {
+    if (place && selectedDate) {
+      checkAvailability();
+    }
+  }, [place, selectedDate, checkAvailability]);
 
   const addGuest = () => {
     if (guests.length < 6) {
