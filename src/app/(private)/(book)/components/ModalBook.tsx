@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Plus, Trash2, Loader2 } from 'lucide-react'
+import { Plus, Trash2, Loader2, Check, X } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import Modal from '@/app/components/Modal';
@@ -20,6 +20,25 @@ export default function ModalBook({ place, isOpen, onClose }: ModalProps) {
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
   const [isCheckingAvailability, setIsCheckingAvailability] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  // Função para limpar todos os dados do modal
+  const clearModalData = () => {
+    setGuests(['']);
+    setSelectedDate(new Date());
+    setReason('');
+    setIsAvailable(null);
+    setIsCheckingAvailability(false);
+    setIsBooking(false);
+    setShowSuccess(false);
+  };
+
+  // Limpar dados quando o modal fechar
+  useEffect(() => {
+    if (!isOpen) {
+      clearModalData();
+    }
+  }, [isOpen]);
 
   // Função para gerar horários disponíveis baseado no horário de funcionamento
   const getAvailableTimeSlots = () => {
@@ -106,7 +125,15 @@ export default function ModalBook({ place, isOpen, onClose }: ModalProps) {
       
       await bookService.book(booking);
       console.log('Reserva criada com sucesso!');
-      onClose?.();
+      
+      // Mostrar animação de sucesso
+      setShowSuccess(true);
+      
+      // Fechar modal após 2 segundos
+      setTimeout(() => {
+        onClose?.();
+      }, 2000);
+      
     } catch (error) {
       console.error('Erro ao criar reserva:', error);
     } finally {
@@ -114,13 +141,33 @@ export default function ModalBook({ place, isOpen, onClose }: ModalProps) {
     }
   }
 
+  const handleCloseModal = () => {
+    clearModalData();
+    onClose?.();
+  };
+
   if (!isOpen || !place) return null;
 
   const availableTimeSlots = getAvailableTimeSlots();
   const isFormValid = isAvailable && reason.trim().length > 0 && !isBooking;
 
   return (
-    <Modal title={place.name} isOpen={isOpen} onClose={onClose}>
+    <Modal title={place.name} isOpen={isOpen} onClose={handleCloseModal}>
+        {/* Overlay de sucesso */}
+        {showSuccess && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-8 flex flex-col items-center gap-4">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                <Check className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-800">Reserva Concluída!</h3>
+              <p className="text-gray-600 text-center">
+                Sua reserva foi realizada com sucesso.
+              </p>
+            </div>
+          </div>
+        )}
+
         {place.needPayment && (
           <p className="text-sm text-gray-500 mt-1 mb-4 flex items-center gap-1">
             *Necessita pagamento
