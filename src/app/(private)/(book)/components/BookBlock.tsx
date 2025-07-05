@@ -8,21 +8,19 @@ import { placesService } from '@/services/places';
 import { authService } from '@/services/auth';
 
 export default function BookBlock() {
-    const [selectedBook, setSelectedBook] = useState<string | null>(null);
+    const [selectedPlace, setSelectedPlace] = useState<Places | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [needPaid, setNeedPaid] = useState(false);
     const [places, setPlaces] = useState<Places[]>([]);
     const {getCondominiumId} = authService;
 
-    const handleBookClick = (bookName: string, needPaid: boolean) => {
-        setSelectedBook(bookName);
+    const handleBookClick = (place: Places) => {
+        setSelectedPlace(place);
         setIsModalOpen(true);
-        setNeedPaid(needPaid);
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        setSelectedBook(null);
+        setSelectedPlace(null);
     };
 
     const getPlaces = useCallback(async () => {
@@ -36,26 +34,38 @@ export default function BookBlock() {
 
     return (
         <>
-            <div className="flex flex-row gap-5 p-5">
-                {places.map((book) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-5">
+                {places.map((place) => (
                     <div 
-                        key={book.id} 
-                        className="bg-white p-10 rounded-md shadow-md hover:scale-105 transition-all duration-300 cursor-pointer"
-                        onClick={() => handleBookClick(book.name, book.needPayment)}
+                        key={place.id} 
+                        className="bg-white rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer overflow-hidden"
+                        onClick={() => handleBookClick(place)}
                     >
-                        <Image src={book?.image?.[0] || "/logo/logo.png"} alt={book.name} width={100} height={100} />
-                        <h1 className="text-xl font-bold">{book.name}</h1>
-                        <p className="text-sm text-[#6b7280]">{book.needPayment && "Necessita pagamento"}</p>
+                        <div className="relative w-full h-48">
+                            <Image 
+                                src={place?.image?.[0] || "/logo/logo.png"} 
+                                alt={place.name} 
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            />
+                        </div>
+                        <div className="p-4">
+                            <h1 className="text-lg font-bold text-gray-800 mb-2">{place.name}</h1>
+                            {place.needPayment && (
+                                <p className="text-sm text-orange-600 font-medium">
+                                    💳 Necessita pagamento
+                                </p>
+                            )}
+                        </div>
                     </div>
                 ))}
             </div>
 
             <ModalBook 
-                title={selectedBook || ''} 
+                place={selectedPlace}
                 isOpen={isModalOpen} 
                 onClose={handleCloseModal}
-                needPaid={needPaid}
-                placeId={places.find((place) => place.name === selectedBook)?._id.toString() || ''}
             />
         </>
     )
