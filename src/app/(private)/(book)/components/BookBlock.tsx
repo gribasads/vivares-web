@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState, useCallback } from 'react'
 import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
 import ModalBook from './ModalBook';
 
 import { Places } from '@/app/types/places';
@@ -11,6 +12,7 @@ export default function BookBlock() {
     const [selectedPlace, setSelectedPlace] = useState<Places | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [places, setPlaces] = useState<Places[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const {getCondominiumId} = authService;
 
     const handleBookClick = (place: Places) => {
@@ -24,13 +26,30 @@ export default function BookBlock() {
     };
 
     const getPlaces = useCallback(async () => {
-        const response = await placesService.getPlaces(getCondominiumId() || '');
-        setPlaces(response);
+        setIsLoading(true);
+        try {
+            const response = await placesService.getPlaces(getCondominiumId() || '');
+            setPlaces(response);
+        } catch (error) {
+            console.error('Erro ao carregar lugares:', error);
+        } finally {
+            setIsLoading(false);
+        }
     }, [getCondominiumId]);
 
     useEffect(() => {
         getPlaces();
     }, [getPlaces]);
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-[400px] w-full ">
+                <div className="flex flex-col items-center gap-4">
+                    <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>
