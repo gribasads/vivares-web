@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Plus, Trash2, Loader2, Check, X } from 'lucide-react'
+import { Plus, Trash2, Loader2, Check, X, AlertTriangle } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import Modal from '@/app/components/Modal';
@@ -129,10 +129,10 @@ export default function ModalBook({ place, isOpen, onClose }: ModalProps) {
       // Mostrar animação de sucesso
       setShowSuccess(true);
       
-      // Fechar modal após 2 segundos
+      // Fechar modal após 4 segundos
       setTimeout(() => {
         onClose?.();
-      }, 2000);
+      }, 4000);
       
     } catch (error) {
       console.error('Erro ao criar reserva:', error);
@@ -157,13 +157,27 @@ export default function ModalBook({ place, isOpen, onClose }: ModalProps) {
         {showSuccess && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-8 flex flex-col items-center gap-4">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                <Check className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800">Reserva Concluída!</h3>
-              <p className="text-gray-600 text-center">
-                Sua reserva foi realizada com sucesso.
-              </p>
+              {place.needPayment ? (
+                <>
+                  <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center">
+                    <AlertTriangle className="w-8 h-8 text-yellow-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-800">Reserva Pendente</h3>
+                  <p className="text-gray-600 text-center max-w-sm">
+                    Sua reserva foi registrada, mas só será confirmada após o pagamento na administração.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                    <Check className="w-8 h-8 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-800">Reserva Concluída!</h3>
+                  <p className="text-gray-600 text-center">
+                    Sua reserva foi realizada com sucesso.
+                  </p>
+                </>
+              )}
             </div>
           </div>
         )}
